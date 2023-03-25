@@ -21,7 +21,6 @@ const CharactersList = () => {
     if (pageStor) {
       navigate(`/${pageStor}`)
     }
-
     fetch("https://rickandmortyapi.com/api/character/")
       .then(res => res.json())
       .then(data => {
@@ -29,7 +28,6 @@ const CharactersList = () => {
         count.current = Math.ceil(total / (postsPerPageStor ?? postsPerPage))
         setTotal(total)
       })
-
   }, [])
 
   useEffect(() => {
