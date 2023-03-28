@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom"
+import { Container, Input, Typography } from '@mui/material';
 
 import PaginationRounded from "./components/PaginationRounded"
 
@@ -51,19 +52,25 @@ const CharactersList = () => {
 
   return (
     <>
-      <div>Posts per page:
-        <input
-          value={postsPerPage}
-          onChange={inputHandler}
-          type="number">
-        </input>
-      </div>
-      {location.pathname === '/' && <div>Select a page to display the characters</div>}
-      {<Outlet context={postsPerPage} />}
-      {count.current ? <PaginationRounded
-        count={count.current} /> :
-        <div>Loading...</div>
-      }
+      <Container maxWidth="lg">
+        <Typography variant="body1" component="div">
+          Posts per page:
+          <Input
+            value={postsPerPage}
+            onChange={inputHandler}
+            type="number"
+            sx={{ marginLeft: "14px", maxWidth: "60px" }}
+          />
+        </Typography>
+        {location.pathname === '/' &&
+          <Typography variant="body1" sx={{ margin: "18px 0" }}>
+            Select a page to display the characters
+          </Typography>}
+        {<Outlet context={postsPerPage} />}
+        {count.current ? <PaginationRounded count={count.current} /> :
+          <Typography variant="body1">Loading...</Typography>
+        }
+      </Container>
     </>
   )
 }
