@@ -1,13 +1,13 @@
 import { useEffect, useMemo, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { Avatar, Box, Button, Container, Typography } from "@mui/material"
-import { ArrowBack } from "@mui/icons-material";
+import { Avatar, Box, Button, Container, IconButton, Typography } from "@mui/material"
+import { ArrowBack, ArrowForwardIos, ArrowBackIosNew } from "@mui/icons-material";
 
 import Info from "./components/Info";
 
-const Character = () => {
+const Character = ({ total }) => {
   const [person, setPerson] = useState(null)
-  const { id } = useParams()
+  const id = +useParams().id
   const navigate = useNavigate();
 
   const dataInfo = useMemo(() => ["gender", "status", "species", "origin", "type"], [])
@@ -18,7 +18,7 @@ const Character = () => {
       .then(json => {
         setPerson(json)
       })
-  }, [])
+  }, [id])
 
   if (!person) {
     return <Container maxWidth="lg">
@@ -37,25 +37,40 @@ const Character = () => {
     return < Info key={item} type={item} val={val} />
   })
 
+  const prevHandler = () => {
+    if (id > 1) {
+      navigate(`/character/${id - 1}`)
+    }
+  }
+  const nextHandler = () => {
+    if (id < total) {
+      navigate(`/character/${id + 1}`)
+    }
+  }
+
   return (
     <Container maxWidth="lg">
       <Button
         variant="text"
         startIcon={<ArrowBack />}
         sx={{ fontWeight: 700, textTransform: "uppercase" }}
-        onClick={() => { navigate(-1) }}
+        onClick={() => { navigate("/") }}
       >go back</Button>
       <Box sx={{ maxWidth: 413, margin: "0 auto" }}>
-        <Avatar
-          alt="character"
-          src={person.image}
-          sx={{
-            width: "74%",
-            height: "74%",
-            border: "5px solid #F2F2F7",
-            margin: "16px auto",
-          }}
-        />
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <IconButton onClick={prevHandler}><ArrowBackIosNew /></IconButton>
+          <Avatar
+            alt="character"
+            src={person.image}
+            sx={{
+              width: "74%",
+              height: "74%",
+              border: "5px solid #F2F2F7",
+              margin: "16px auto",
+            }}
+          />
+          <IconButton onClick={nextHandler}><ArrowForwardIos /></IconButton>
+        </Box>
         <Typography
           variant="h3"
           align="center"

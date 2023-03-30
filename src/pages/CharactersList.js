@@ -4,31 +4,22 @@ import { Container, Input, Typography } from '@mui/material';
 
 import PaginationRounded from "./components/PaginationRounded"
 
-const CharactersList = () => {
+const CharactersList = ({ total }) => {
   const [postsPerPage, setPostsPerPage] = useState(8)
-  const [total, setTotal] = useState(null)
-  const count = useRef(null)
+  const count = useRef(Math.ceil(total / (postsPerPage)))
   const navigate = useNavigate();
   const location = useLocation();
   const { page } = useParams()
 
   useEffect(() => {
-    let postsPerPageStor = localStorage.getItem("postsPerPage")
+    const postsPerPageStor = +localStorage.getItem("postsPerPage")
     if (postsPerPageStor) {
-      postsPerPageStor = +postsPerPageStor
       setPostsPerPage(postsPerPageStor)
     }
     const pageStor = +localStorage.getItem("page")
     if (pageStor) {
       navigate(`/${pageStor}`)
     }
-    fetch("https://rickandmortyapi.com/api/character/")
-      .then(res => res.json())
-      .then(data => {
-        const total = data.info.count
-        count.current = Math.ceil(total / (postsPerPageStor ?? postsPerPage))
-        setTotal(total)
-      })
   }, [])
 
   useEffect(() => {
@@ -67,9 +58,7 @@ const CharactersList = () => {
             Select a page to display the characters
           </Typography>}
         {<Outlet context={postsPerPage} />}
-        {count.current ? <PaginationRounded count={count.current} /> :
-          <Typography variant="body1">Loading...</Typography>
-        }
+        <PaginationRounded count={count.current} />
       </Container>
     </>
   )
