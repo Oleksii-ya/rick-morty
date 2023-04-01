@@ -8,6 +8,8 @@ import List from './pages/components/List';
 import theme from './pages/styles';
 import { useEffect, useState } from 'react';
 
+import Test from './Test';
+
 function App() {
   const [total, setTotal] = useState(null)
   useEffect(() => {
@@ -25,6 +27,11 @@ function App() {
     <>
       <CssBaseline />
       <ThemeProvider theme={theme}>
+
+        <Container maxWidth="lg">
+          <Test />
+        </Container>
+
         <Routes>
           <Route path="/" element={<CharactersList total={total} />}>
             <Route path=":page" element={<List />} />
