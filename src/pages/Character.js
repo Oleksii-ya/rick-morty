@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import { Avatar, Box, Button, Container, IconButton, Typography } from "@mui/material"
+import { Avatar, Box, Button, Container, Grid, IconButton, Typography } from "@mui/material"
 import { ArrowBack, ArrowForwardIos, ArrowBackIosNew } from "@mui/icons-material";
 
 import Info from "./components/Info";
+import Chat from "./components/Chat";
 
 const Character = ({ total }) => {
   const [person, setPerson] = useState(null)
@@ -63,8 +64,8 @@ const Character = ({ total }) => {
             alt="character"
             src={person.image}
             sx={{
-              width: "74%",
-              height: "74%",
+              width: "50%",
+              height: "50%",
               border: "5px solid #F2F2F7",
               margin: "16px auto",
             }}
@@ -72,21 +73,28 @@ const Character = ({ total }) => {
           <IconButton onClick={nextHandler}><ArrowForwardIos /></IconButton>
         </Box>
         <Typography
-          variant="h3"
+          variant="h4"
           align="center"
-          sx={{ marginBottom: "48px" }}
+          sx={{ marginBottom: "18px" }}
         >
           {person.name}
         </Typography>
-        <Typography
-          variant="h6"
-          align="center"
-          sx={{ marginBottom: "58px", fontWeight: 500, color: "#8E8E93" }}
-        >
-          Informations
-        </Typography>
-        {dataList}
       </Box>
+      <Grid container spacing={3}>
+        <Grid item sm={4} xs={12}>
+          <Typography
+            variant="h6"
+            align="center"
+            sx={{ marginBottom: "28px", fontWeight: 500, color: "#333333" }}
+          >
+            Informations
+          </Typography>
+          {dataList}
+        </Grid>
+        <Grid item sm={8} xs={12}>
+          <Chat name={person.name} />
+        </Grid>
+      </Grid>
     </Container>
   )
 }
