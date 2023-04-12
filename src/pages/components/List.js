@@ -1,16 +1,15 @@
 import { Grid, Typography } from "@mui/material";
 import { useLayoutEffect } from "react";
-import { useOutletContext, useParams } from "react-router-dom"
-import useFetch from "../../hooks/useFetch"
+import { useParams } from "react-router-dom"
+import useCharacters from "../../hooks/useCharacters"
 
 import CardRick from "./CardRick";
 
-const List = () => {
-  const postsPerPage = useOutletContext()
+const List = ({ postsPerPage }) => {
   const { page } = useParams();
-  const [chars, doFetch] = useFetch()
+  const [chars, fetchPosts] = useCharacters()
   useLayoutEffect(() => {
-    doFetch(page, postsPerPage)
+    fetchPosts(page, postsPerPage)
   }, [page, postsPerPage])
 
   if (chars) {

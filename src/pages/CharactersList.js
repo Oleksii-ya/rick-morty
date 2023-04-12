@@ -1,15 +1,22 @@
-import { useEffect, useRef, useState } from "react"
-import { Outlet, useLocation, useNavigate, useParams } from "react-router-dom"
-import { Container, Input, Typography } from '@mui/material';
+import { useEffect, useMemo, useState } from "react"
+import { useNavigate, useParams } from "react-router-dom"
+import { Box, Container } from '@mui/material';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 
 import PaginationRounded from "./components/PaginationRounded"
+import List from "./components/List";
 
 const CharactersList = ({ total }) => {
   const [postsPerPage, setPostsPerPage] = useState(8)
-  const count = useRef(Math.ceil(total / (postsPerPage)))
   const navigate = useNavigate();
-  const location = useLocation();
   const { page } = useParams()
+  const selectItems = useMemo(() => {
+    return Array.from({ length: 24 }, (_, i) => <MenuItem key={i} value={i + 1}>{i + 1}</MenuItem>)
+  }, [])
+  const count = useMemo(() => Math.ceil(total / (postsPerPage)), [total, postsPerPage])
 
   useEffect(() => {
     const postsPerPageStor = +localStorage.getItem("postsPerPage")
@@ -28,37 +35,42 @@ const CharactersList = ({ total }) => {
     }
   }, [page])
 
-  const inputHandler = (e) => {
-    const val = +e.target.value
-    if (val < 1 || val > 24) {
-      return
-    }
+  const handleChange = (e) => {
+    let val = +e.target.value
     localStorage.setItem("postsPerPage", val)
-    count.current = Math.ceil(total / val)
+    const countCh = Math.ceil(total / val)
     setPostsPerPage(val)
-    if (+page > count.current) {
-      navigate(`/${count.current}`)
+    if (+page > countCh) {
+      navigate(`/${countCh}`)
     }
   }
 
   return (
     <>
       <Container maxWidth="lg">
-        <Typography variant="body1" component="div">
-          Posts per page:
-          <Input
-            value={postsPerPage}
-            onChange={inputHandler}
-            type="number"
-            sx={{ marginLeft: "14px", maxWidth: "60px" }}
-          />
-        </Typography>
-        {location.pathname === '/' &&
-          <Typography variant="body1" sx={{ margin: "18px 0" }}>
-            Select a page to display the characters
-          </Typography>}
-        {<Outlet context={postsPerPage} />}
-        <PaginationRounded count={count.current} />
+        <Box sx={{
+          marginBottom: "18px",
+          display: "flex",
+          alignItems: "center",
+          flexWrap: "wrap"
+        }}>
+          <FormControl sx={{ width: "120px", margin: "12px 12px 12px 0" }}>
+            <InputLabel id="select-label">Posts per page</InputLabel>
+            <Select
+              labelId="select-label"
+              value={postsPerPage}
+              label="Posts per page"
+              onChange={handleChange}
+              MenuProps={{
+                style: { maxHeight: "224px" }
+              }}
+            >
+              {selectItems}
+            </Select>
+          </FormControl>
+          <PaginationRounded count={count} />
+        </Box>
+        <List postsPerPage={postsPerPage} />
       </Container>
     </>
   )
