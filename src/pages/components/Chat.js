@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { Box, Button, LinearProgress, TextField, Typography } from "@mui/material"
 
 const Chat = ({ name }) => {
@@ -6,12 +6,13 @@ const Chat = ({ name }) => {
   const [answer, setAnswer] = useState("");
   const [question, setQuestion] = useState(`${name} розкажи про себе`)
   const [progress, setProgress] = useState(null)
+  const controller = useRef(new AbortController())
 
   const handleClick = () => {
-    setProgress(<LinearProgress
-      sx={{ margin: "16px 0" }}
-      color="progress" />)
+    setProgress(<LinearProgress sx={{ margin: "16px 0" }} color="progress" />)
+
     fetch('https://rick-morty.fly.dev/generate-text', {
+      signal: controller.current.signal,
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -23,18 +24,24 @@ const Chat = ({ name }) => {
     })
       .then(response => response.text())
       .then(data => {
-        if (progress !== null) {
-          setProgress(null)
-          setAnswer(data)
-        }
-      })
-      .catch(error => {
         setProgress(null)
-        console.error(error)
+        setAnswer(data)
+      })
+      .catch(err => {
+        setProgress(null)
+        if (err.name === "AbortError") {
+          setAnswer(`the question to ${name} was cancelled`)
+        } else {
+          console.log('Помилка:', err);
+        }
       });
   }
 
   useLayoutEffect(() => {
+    if (progress) {
+      controller.current.abort()
+      controller.current = new AbortController()
+    }
     setAnswer("")
     setQuestion(`${name} розкажи про себе`)
     setProgress(null)

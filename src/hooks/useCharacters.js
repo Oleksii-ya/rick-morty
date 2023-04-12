@@ -1,9 +1,9 @@
 import { useState } from "react"
 
-const useFetch = () => {
+const useCharacters = () => {
   const [chars, setChars] = useState(null)
 
-  const doFetch = (page, postsPerPage) => {
+  const fetchPosts = (page, postsPerPage) => {
     setChars(null)
     const arr = new Array(postsPerPage).fill().map((_, i) => (page - 1) * postsPerPage + i + 1)
     const strArr = JSON.stringify(arr)
@@ -12,7 +12,7 @@ const useFetch = () => {
       .then(data => setChars(data))
   }
 
-  return [chars, doFetch]
+  return [chars, fetchPosts]
 }
 
-export default useFetch
+export default useCharacters
