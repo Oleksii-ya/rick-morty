@@ -19,6 +19,9 @@ const CharactersList = ({ total }) => {
   const count = useMemo(() => Math.ceil(total / (postsPerPage)), [total, postsPerPage])
 
   useEffect(() => {
+    if (page > 1) {
+      return
+    }
     const postsPerPageStor = +localStorage.getItem("postsPerPage")
     if (postsPerPageStor) {
       setPostsPerPage(postsPerPageStor)

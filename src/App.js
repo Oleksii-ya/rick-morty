@@ -8,6 +8,7 @@ import Character from './pages/Character';
 import Home from './pages/Home';
 import Header from './pages/components/Header';
 import theme from './pages/styles';
+import UserProvider from './store/userProvider';
 
 
 function App() {
@@ -27,14 +28,16 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Box sx={{ padding: "16px" }}>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/:page" element={<CharactersList total={total} />} />
-            <Route path="/character/:id" element={<Character total={total} />} />
-          </Routes>
-        </Box>
+        <UserProvider>
+          <Box sx={{ padding: "16px" }}>
+            <Header />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/:page" element={<CharactersList total={total} />} />
+              <Route path="/character/:id" element={<Character total={total} />} />
+            </Routes>
+          </Box>
+        </UserProvider>
       </ThemeProvider>
     </>
   );
