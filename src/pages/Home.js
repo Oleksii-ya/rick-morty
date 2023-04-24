@@ -8,7 +8,7 @@ const Home = () => {
 
   return (
     <Container maxWidth="lg">
-      <Card>
+      <Card sx={{ maxWidth: "1200px", margin: "0 auto" }}>
         <CardActionArea
           sx={{ position: "relative" }}
           onClick={() => { navigate("/1") }}>

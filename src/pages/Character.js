@@ -55,7 +55,7 @@ const Character = ({ total }) => {
         variant="text"
         startIcon={<ArrowBack />}
         sx={{ fontWeight: 700, textTransform: "uppercase" }}
-        onClick={() => { navigate("/") }}
+        onClick={() => { navigate(-1) }}
       >go back</Button>
       <Box sx={{ maxWidth: 413, margin: "0 auto" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -92,7 +92,7 @@ const Character = ({ total }) => {
           {dataList}
         </Grid>
         <Grid item sm={8} xs={12}>
-          <Chat name={person.name} />
+          <Chat name={person.name} img={person.image} />
         </Grid>
       </Grid>
     </Container>

@@ -8,13 +8,8 @@ export default function PaginationRounded({ count }) {
   const navigate = useNavigate()
   const { page } = useParams()
   const startPage = useRef(+page)
-
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down('sm'));
-
-
-  console.log({ count })
-
 
   return (
     <Stack spacing={2}>
